@@ -26,6 +26,13 @@ dependencies {
 	implementation 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.1.5.RELEASE'
 
+	//Postgres
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation('org.postgresql:postgresql')
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+
+
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
 	

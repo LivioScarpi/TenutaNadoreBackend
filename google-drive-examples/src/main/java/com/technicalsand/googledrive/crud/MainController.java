@@ -1,8 +1,13 @@
 package com.technicalsand.googledrive.crud;
 
 import com.google.api.services.drive.model.File;
+import com.technicalsand.googledrive.crud.model.Review;
+import com.technicalsand.googledrive.crud.Repository.PostgresRepository;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +32,17 @@ import java.util.List;
 @Slf4j
 public class MainController {
 	private FileManager fileManager;
+
+	@Autowired
+	PostgresRepository repository;
+
+	@GetMapping("/save_review")
+	public String save_review(){
+		// save a single Customer
+		repository.save(new Review("Livio", "Olio fantastico, mi piace molto", "ID1;ID2"));
+		
+		return "Review created";
+	}
 
 	@GetMapping({"/"})
 	public ResponseEntity<List<File>> listEverything() throws IOException, GeneralSecurityException {
