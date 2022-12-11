@@ -1,5 +1,6 @@
 package com.technicalsand.googledrive.crud.model;
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +23,12 @@ public class Review implements Serializable {
  
 	@Column(name = "review")
 	private String review;
+
+    @Column(name = "rating")
+	private Integer rating;
+
+    @Column(name = "date")
+	private Date date;
  
     @Column(name = "images")
 	private String images;
@@ -32,11 +39,15 @@ public class Review implements Serializable {
 	public Review(String username, String review) {
 		this.username = username;
 		this.review = review;
+        this.date = new Date();
+        this.rating = 5;
 	}
 
     public Review(String username, String review, String images) {
 		this.username = username;
 		this.review = review;
+        this.date = new Date();
+        this.rating = 5;
 		this.images = images;
 	}
 
@@ -62,6 +73,22 @@ public class Review implements Serializable {
 
     public void setImages(String images) {
         this.images = images;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
     public String toString() {

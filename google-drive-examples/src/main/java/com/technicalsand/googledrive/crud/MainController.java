@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.buffer.DataBufferLimitException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +41,19 @@ public class MainController {
 
 	@Autowired
 	PostgresRepository repository;
+
+	@RequestMapping("/get_all_reviews")
+    public ResponseEntity<List<Review>> loadAll() {
+        log.info("start loadAll users");
+        try {
+            List<Review> users = repository.findAll();
+            log.info("Found {} users", users.size());
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } catch (DataBufferLimitException e) {
+            log.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 	@GetMapping("/save_review")
 	public String save_review() {
