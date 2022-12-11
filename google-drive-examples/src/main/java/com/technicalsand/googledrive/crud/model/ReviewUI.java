@@ -1,10 +1,13 @@
 package com.technicalsand.googledrive.crud.model;
 
+import java.util.Date;
+
 public class ReviewUI {
 
     private String username;
     private String review;
     private String images;
+    private Date date;
     
     protected ReviewUI() {
     }
@@ -42,6 +45,14 @@ public class ReviewUI {
 
     public void setImages(String images) {
         this.images = images;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String toString() {
