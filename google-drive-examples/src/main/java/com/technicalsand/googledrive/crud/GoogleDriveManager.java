@@ -58,7 +58,9 @@ public class GoogleDriveManager {
 		if (in == null) {
 			throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
 		}
+		System.out.println("IL FILE E' TROVATO");
 		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+		System.out.println("IL FILE E' STATO LETTO");
 
 		// Build flow and trigger user authorization request.
 		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
@@ -66,6 +68,9 @@ public class GoogleDriveManager {
 				.setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
 				.setAccessType("offline")
 				.build();
+
+		System.out.println("PRMA DI CREARE RECEIVER");
+
 		LocalServerReceiver receiver = new LocalServerReceiver.Builder().setHost("127.0.0.1").setPort(8089).build();
 
 		return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");

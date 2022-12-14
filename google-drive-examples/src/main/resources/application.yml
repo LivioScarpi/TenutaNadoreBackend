@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: microservice_tenutanadore
+server:
+  port: 8081
