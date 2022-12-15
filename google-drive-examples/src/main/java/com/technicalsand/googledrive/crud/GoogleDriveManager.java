@@ -5,6 +5,7 @@ import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInsta
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -14,6 +15,8 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,6 +48,18 @@ public class GoogleDriveManager {
 
 	}
 
+	// build and return an authorized drive client service
+	public static Drive getDriveService() throws IOException, GeneralSecurityException {
+		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+		// Instantiating a client
+		Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+				.setApplicationName(APPLICATION_NAME)
+				.build();
+
+		return service;
+	}
+
 	/**
 	 * Creates an authorized Credential object.
 	 *
@@ -52,28 +67,49 @@ public class GoogleDriveManager {
 	 * @return An authorized Credential object.
 	 * @throws IOException If the credentials.json file cannot be found.
 	 */
-	private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-		// Load client secrets.
+	private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
+		System.out.println("SONO IN GET CREDENTIALS");
+		System.out.println("PATH: " + CREDENTIALS_FILE_PATH);
+
+
 		InputStream in = GoogleDriveManager.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-		if (in == null) {
-			throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-		}
-		System.out.println("IL FILE E' TROVATO");
-		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-		System.out.println("IL FILE E' STATO LETTO");
 
-		// Build flow and trigger user authorization request.
-		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-				HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-				.setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-				.setAccessType("offline")
-				.build();
+		System.out.println("HO LETTO INPUT STREAM");
 
-		System.out.println("PRMA DI CREARE RECEIVER");
+		GoogleCredential credential = GoogleCredential.fromStream(in)
+				.createScoped(SCOPES);
 
-		LocalServerReceiver receiver = new LocalServerReceiver.Builder().setHost("127.0.0.1").setPort(8089).build();
+		System.out.println("PRIMA DEL RETURN CREDENTIALS");
+		System.out.println("CIAOOOOO");
 
-		return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+		return credential;
+		
+		// // Load client secrets.
+		// InputStream in =
+		// GoogleDriveManager.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+		// if (in == null) {
+		// throw new FileNotFoundException("Resource not found: " +
+		// CREDENTIALS_FILE_PATH);
+		// }
+		// System.out.println("IL FILE E' TROVATO");
+		// GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
+		// new InputStreamReader(in));
+		// System.out.println("IL FILE E' STATO LETTO");
+
+		// // Build flow and trigger user authorization request.
+		// GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+		// HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+		// .setDataStoreFactory(new FileDataStoreFactory(new
+		// java.io.File(TOKENS_DIRECTORY_PATH)))
+		// .setAccessType("offline")
+		// .build();
+
+		// System.out.println("PRMA DI CREARE RECEIVER");
+
+		// LocalServerReceiver receiver = new
+		// LocalServerReceiver.Builder().setHost("127.0.0.1").setPort(8089).build();
+
+		// return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
 	}
 
 }
