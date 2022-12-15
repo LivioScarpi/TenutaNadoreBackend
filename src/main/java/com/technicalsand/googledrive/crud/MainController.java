@@ -42,6 +42,11 @@ public class MainController {
 	@Autowired
 	PostgresRepository repository;
 
+	@GetMapping("/")
+	public String defaultPage() {
+		return "Welcome to Tenuta Nadore Backend";
+	}
+
 	@RequestMapping("/get_all_reviews")
     public ResponseEntity<List<Review>> loadAll() {
         log.info("start loadAll users");
@@ -55,16 +60,7 @@ public class MainController {
         }
     }
 
-	@GetMapping("/save_review")
-	public String save_review() {
-		// save a single Customer
-		repository.save(new Review("Livio", "Olio fantastico, mi piace molto", "ID1;ID2"));
-
-		return "Review created";
-	}
-
-	// QUESTA FUNZIONA
-	@PostMapping("/save_review_test")
+	@PostMapping("/save_review")
 	public ResponseEntity<String> save_review_test(@RequestBody Review review) {
 		// save a single Customer
 		System.out.println("SONO IN SAVE REVIEW TEST");
@@ -74,22 +70,7 @@ public class MainController {
 		return ResponseEntity.ok("Ok");
 	}
 
-	// @PostMapping(value = "/save_review_test_images", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = {
-	// 		MediaType.APPLICATION_JSON_VALUE })
-	// public ResponseEntity<String> save_review_test_images(@RequestBody MultipartFile formData) {
-	// 	// save a single Customer
-	// 	System.out.println("SONO IN SAVE REVIEW TEST IMAGES");
-	// 	System.out.println(formData);
-
-	// 	// System.out.println("SONO DOPO LA STAMPA DI REVIEW");
-	// 	// log.info("Request contains, File: " + formData.getOriginalFilename());
-
-	// 	// repository.save(review);
-
-	// 	return ResponseEntity.ok("Ok");
-	// }
-
-	@GetMapping({ "/" })
+	@GetMapping({ "/get_all_images" })
 	public ResponseEntity<List<File>> listEverything() throws IOException, GeneralSecurityException {
 		System.out.println("SONO IN LIST EVERYTHING");
 		log.info("LOG - SONO IN LIST EVERYTHING ");
