@@ -68,22 +68,13 @@ public class GoogleDriveManager {
 	 * @throws IOException If the credentials.json file cannot be found.
 	 */
 	private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-		System.out.println("SONO IN GET CREDENTIALS");
-		System.out.println("PATH: " + CREDENTIALS_FILE_PATH);
-
-
 		InputStream in = GoogleDriveManager.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-
-		System.out.println("HO LETTO INPUT STREAM");
 
 		GoogleCredential credential = GoogleCredential.fromStream(in)
 				.createScoped(SCOPES);
 
-		System.out.println("PRIMA DEL RETURN CREDENTIALS");
-		System.out.println("CIAOOOOO");
-
 		return credential;
-		
+
 		// // Load client secrets.
 		// InputStream in =
 		// GoogleDriveManager.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
