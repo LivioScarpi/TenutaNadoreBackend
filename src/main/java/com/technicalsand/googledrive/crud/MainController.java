@@ -51,9 +51,9 @@ public class MainController {
     public ResponseEntity<List<Review>> loadAll() {
         log.info("start loadAll users");
         try {
-            List<Review> users = repository.findAll();
-            log.info("Found {} users", users.size());
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            List<Review> reviews = repository.findAll();
+            log.info("Found {} reviews", reviews.size());
+            return new ResponseEntity<>(reviews, HttpStatus.OK);
         } catch (DataBufferLimitException e) {
             log.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -64,8 +64,14 @@ public class MainController {
 	public ResponseEntity<String> save_review_test(@RequestBody Review review) {
 		// save a single Customer
 		System.out.println("SONO IN SAVE REVIEW TEST");
+				System.out.println("NUOVA STAMPA BELLIIII!!");
+
 		System.out.println(review);
-		repository.save(review);
+		review = repository.saveAndFlush(review);
+		// repository.flush();
+		System.out.println("STAMPO L'ID : "  + review.getId());
+
+		System.out.println(review.getId());
 
 		return ResponseEntity.ok("Ok");
 	}
