@@ -3,3 +3,11 @@ spring:
     name: microservice_tenutanadore
 server:
   port: 8081
+
+#Configuration for size of files that can be uploaded
+#Set Tomcat to accept any file size for failed upload
+server.tomcat.max-swallow-size: -1
+#set the Spring max file size for upload
+spring.servlet.multipart:
+    max-file-size: 10MB
+    max-request-size: 10MB
